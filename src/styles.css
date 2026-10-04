@@ -1,0 +1,13 @@
+.todoListContainer {
+  display: flex;
+}
+
+.projectContainer {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.taskContainer {
+  display: flex;
+  flex-direction: column;
+}
