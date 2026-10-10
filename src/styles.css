@@ -1,13 +1,19 @@
-.todoListContainer {
-  display: flex;
-}
-
-.projectContainer {
-  display: flex;
-  flex-wrap: wrap;
-}
-
-.taskContainer {
+.todo-list-container {
+  display: grid;
   display: flex;
   flex-direction: column;
+  gap: 10px;
+}
+
+.project-card {
+  display: flex;
+  flex-wrap: wrap;
+  background-color: aquamarine;
+  gap: 10px;
+}
+
+.task-card {
+  display: flex;
+  flex-direction: column;
+  background-color: antiquewhite;
 }

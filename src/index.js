@@ -4,7 +4,7 @@ import { TodoListUI } from "./todoListUI.js";
 
 console.log("Hello from webpack");
 
-const todoList01 = new TodoList("My TodoList");
+const todoList01 = new TodoList("My Todo List");
 todoList01.addProject("New Project", "New description");
 todoList01.addProject("New Project2", "New description");
 todoList01.addProject("New Project3", "New description");
