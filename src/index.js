@@ -1,5 +1,5 @@
-import { TodoList } from "./todoList.js";
 import "./styles.css";
+import { TodoList } from "./todoList.js";
 import { TodoListUI } from "./todoListUI.js";
 
 console.log("Hello from webpack");
@@ -21,6 +21,11 @@ todoList01.addTask({
   title: "My third task",
   priority: "Low",
   dueDate: new Date(2027, 2, 1),
+});
+todoList01.addTask({
+  title: "My fourth task",
+  priority: "Medium",
+  status: "Done",
 });
 
 todoList01.switchProject("Personal");

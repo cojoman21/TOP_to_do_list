@@ -22,6 +22,12 @@ export class Task {
   getTask() {
     return this;
   }
+
+  getTaskStatus() {
+    if (this.status === "Done") return true;
+    return false;
+  }
+
   updateTask({
     title = this.title,
     priority = this.priority,

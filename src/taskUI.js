@@ -1,43 +1,70 @@
+import { format } from "date-fns";
+import { expandIcon } from "./icons.js";
+import { deleteIcon } from "./icons.js";
+import { checkOn } from "./icons.js";
+import { checkOff } from "./icons.js";
+
 export class TaskUI {
   constructor(task) {
     this.taskContainer = document.createElement("div");
     this.taskContainer.dataset.id = task.id;
     this.taskContainer.classList.add("task-container");
 
+    this.checkBtn = document.createElement("button");
+    this.checkBtn.id = "check-btn";
+
+    this.checkBtn.innerHTML = task.getTaskStatus() ? checkOn : checkOff;
+
     this.taskTitle = document.createElement("h3");
     this.taskTitle.classList.add("task-title");
     this.taskTitle.textContent = task.title;
 
-    this.taskPriority = document.createElement("p");
-    this.taskPriority.classList.add("task-priority");
-    this.taskPriority.textContent = task.priority;
+    // this.taskPriority = document.createElement("p");
+    // this.taskPriority.classList.add("task-priority");
+    // this.taskPriority.textContent = task.priority;
 
-    this.taskStatus = document.createElement("p");
-    this.taskStatus.classList.add("task-status");
-    this.taskStatus.textContent = task.status;
+    // this.taskStatus = document.createElement("p");
+    // this.taskStatus.classList.add("task-status");
+    // this.taskStatus.textContent = task.status;
 
     this.taskDueDate = document.createElement("p");
     this.taskDueDate.classList.add("task-due-date");
-    this.taskDueDate.textContent = task.dueDate;
+    this.taskDueDate.textContent =
+      "Due: " + format(new Date(task.dueDate), "MMMM d, yyyy");
 
-    this.taskDescription = document.createElement("p");
-    this.taskDescription.classList.add("task-description");
-    this.taskDescription.textContent = task.description;
+    // this.taskDescription = document.createElement("p");
+    // this.taskDescription.classList.add("task-description");
+    // this.taskDescription.textContent = task.description;
 
-    this.taskNotes = document.createElement("p");
-    this.taskNotes.classList.add("task-notes");
-    this.taskNotes.textContent = task.notes;
+    // this.taskNotes = document.createElement("p");
+    // this.taskNotes.classList.add("task-notes");
+    // this.taskNotes.textContent = task.notes;
+
+    this.expandBtn = document.createElement("button");
+    this.expandBtn.id = "expand-btn";
+    this.expandBtn.innerHTML = expandIcon;
+
+    this.deleteBtn = document.createElement("button");
+    this.deleteBtn.id = "delete-btn";
+    this.deleteBtn.innerHTML = deleteIcon;
+
+    this.buttonsContainer = document.createElement("div");
+    this.buttonsContainer.classList.add("buttons-container");
+    this.buttonsContainer.appendChild(this.expandBtn);
+    this.buttonsContainer.appendChild(this.deleteBtn);
 
     this.taskContent = document.createElement("div");
     this.taskContent.classList.add("task-content");
 
+    this.taskContainer.appendChild(this.checkBtn);
     this.taskContainer.appendChild(this.taskTitle);
-    this.taskContent.appendChild(this.taskPriority);
-    this.taskContent.appendChild(this.taskStatus);
+    // this.taskContent.appendChild(this.taskPriority);
+    // this.taskContent.appendChild(this.taskStatus);
     this.taskContent.appendChild(this.taskDueDate);
-    this.taskContent.appendChild(this.taskDescription);
-    this.taskContent.appendChild(this.taskNotes);
+    // this.taskContent.appendChild(this.taskDescription);
+    // this.taskContent.appendChild(this.taskNotes);
     this.taskContainer.appendChild(this.taskContent);
+    this.taskContainer.appendChild(this.buttonsContainer);
   }
 
   getTaskHTML() {
