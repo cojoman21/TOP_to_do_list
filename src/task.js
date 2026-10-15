@@ -49,4 +49,10 @@ export class Task {
   reopenTask = () => {
     this.status = "In Progress";
   };
+
+  setPriority = (value) => {
+    if (value in ["Low", "Medium", "High"]) {
+      this.priority = value;
+    } else return;
+  };
 }

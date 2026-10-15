@@ -47,6 +47,9 @@ todoList01.addTask({
   description: "Important task",
 });
 
+// todoList01.switchProject("New Project2");
+// todoList01.addTask({ title: "Special task", priority: "High" });
+
 const ui = new TodoListUI(todoList01);
 ui.render("#app");
 

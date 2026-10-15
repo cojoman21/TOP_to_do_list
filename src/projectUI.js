@@ -17,9 +17,15 @@ export class ProjectUI {
     this.projectContent = document.createElement("div");
     this.projectContent.classList.add("project-content");
 
-    for (const task of project.tasks) {
-      const taskUI = new TaskUI(task);
-      this.projectContent.appendChild(taskUI.getTaskHTML());
+    if (project.tasks.length) {
+      for (const task of project.tasks) {
+        const taskUI = new TaskUI(task);
+        this.projectContent.appendChild(taskUI.getTaskHTML());
+      }
+    } else {
+      const message = document.createElement("p");
+      message.textContent = "No tasks yet.";
+      this.projectContent.appendChild(message);
     }
 
     this.projectContainer.appendChild(this.name);
