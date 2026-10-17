@@ -5,6 +5,7 @@ const VALID_PRIORITIES = ["Low", "Medium", "High", "Urgent"];
 export class Task {
   constructor({
     title,
+    projectId,
     priority = "Medium",
     completed = false,
     dueDate = addDays(new Date(), 10),
@@ -13,6 +14,7 @@ export class Task {
     checklist = [],
   } = {}) {
     this.id = crypto.randomUUID();
+    this.projectId = projectId;
     this.title = title;
     this.priority = priority;
     this.completed = completed;
