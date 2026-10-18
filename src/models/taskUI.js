@@ -10,6 +10,7 @@ import {
   descriptionSVG,
   notesSVG,
   statusSVG,
+  checklistSVG,
 } from "../icons/icons.js";
 
 import { format } from "date-fns";
@@ -30,19 +31,25 @@ export class TaskUI {
     this.checkToggleBtn.innerHTML = this.task.completed
       ? checkOnSVG
       : checkOffSVG;
+    // add checkToggleBtn event listener
     this.taskContainer.appendChild(this.checkToggleBtn);
-    // add event listener
 
     this.titlePara = document.createElement("p");
     this.titlePara.classList.add("task-title");
     this.titlePara.textContent = this.task.title;
+    // add edit title event listener
     this.taskContainer.appendChild(this.titlePara);
 
     this.expandToggleBtn = document.createElement("button");
     this.expandToggleBtn.classList.add("expand-toggle-btn");
     this.expandToggleBtn.innerHTML = expandSVG;
+    this.expandToggleBtn.addEventListener("click", _toggleExpand);
     this.taskContainer.appendChild(this.expandToggleBtn);
-    // add event listener
+
+    this.deleteBtn = document.createElement("button");
+    this.deleteBtn.classList.add("delete-btn");
+    this.deleteBtn.innerHTML = deleteSVG;
+    this.taskContainer.appendChild(this.deleteBtn);
 
     this.dateField = document.createElement("div");
     this.dateField.classList.add("task-field");
@@ -56,7 +63,7 @@ export class TaskUI {
     );
     this.dateField.appendChild(this.dateIcoSpan);
     this.dateField.appendChild(this.datePara);
-    // add event listener
+    // add edit date event listener
     this.taskContent.appendChild(this.dateField);
 
     this.priorityField = document.createElement("div");
@@ -69,7 +76,7 @@ export class TaskUI {
     this.priorityField.appendChild(this.priorityIcoSpan);
     this.priorityField.appendChild(this.priorityPara);
     this.priorityField.style.display = "none";
-    // add event listener to priorityPara
+    // add priority edit event listener
     this.taskContent.appendChild(this.priorityField);
 
     this.descriptionField = document.createElement("div");
@@ -87,6 +94,8 @@ export class TaskUI {
     this.descriptionField.appendChild(this.descriptionIcoSpan);
     this.descriptionField.appendChild(this.descriptionPara);
     this.descriptionField.style.display = "none";
+    // add description edit event listener
+    this.taskContent.appendChild(this.descriptionField);
 
     this.notesField = document.createElement("div");
     this.notesField.classList.add("toggle", "task-field");
@@ -103,6 +112,8 @@ export class TaskUI {
     this.notesField.appendChild(this.notesIcoSpan);
     this.notesField.appendChild(this.notesPara);
     this.notesField.style.display = "none";
+    // add notes edit even listener
+    this.taskContent.appendChild(this.notesField);
 
     // Checklist section
     this.checklistField = document.createElement("div");
@@ -110,48 +121,93 @@ export class TaskUI {
     this.checklistIcoSpan = document.createElement("span");
     this.checklistIcoSpan.innerHTML = checklistSVG;
     this.checklistField.appendChild(this.checklistIcoSpan);
-    this.checklistTitle = document.createElement("p");
-    this.checklistField.appendChild(this.checklistTitle);
-    this.checklistTitle.textContent = "Checklist";
+    this.checklistFieldTitle = document.createElement("p");
+    this.checklistField.appendChild(this.checklistFieldTitle);
+    this.checklistFieldTitle.textContent = "Checklist:";
     this.checklistEntries = document.createElement("div");
     this.checklistEntries.classList.add("checklist-entries");
 
-    for (const { title, done } of this.task.checklist) {
-      const checklistEntry = document.createElement("div");
-      checklistEntry.classList.add("checklist-entry");
-      const checkMarkBtn = document.createElement("button");
-      checkMarkBtn.innerHTML = done ? checkOnSVG : checkOffSVG;
-      checkMarkBtn.classList.add("checklist-entry-btn");
-      checklistEntry.appendChild(checkMarkBtn);
-      const titlePara = document.createElement("p");
-      titlePara.classList.add("checklist-entry-title");
-      titlePara.textContent = title;
-      checklistEntry.appendChild(titlePara);
-      this.checklistEntries.appendChild(checklistEntry);
+    for (const item of this.task.checklist) {
+      this.checklistEntries.appendChild(this._createChecklistItem(item));
     }
 
-    this.checklistEntry = document.createElement("div");
-    this.checklistEntry.classList.add("checklist-entry");
-    this.checkItemMarkBtn = document.createElement("button");
-    this.checkItemMarkBtn.innerHTML = done ? checkOnSVG : checkOffSVG;
-    this.checkItemMarkBtn.classList.add("checklist-entry-btn");
-    this.checklistEntry.appendChild(checkItemMarkBtn);
+    this.checklistInputRow = document.createElement("div");
+    this.checklistInputRow.classList.add("checklist-input-entry");
     this.checklistInput = document.createElement("input");
     this.checklistInput.classList.add("checklist-entry-input");
     this.checklistInput.placeholder = "Click to add item";
-    this.checklistEntry.appendChild(checklistInput);
-    this.checklistEntries.appendChild(checklistEntry);
+    this.checklistInputRow.appendChild(this.checklistInput);
+    this.checklistEntries.appendChild(this.checklistInputRow);
 
     // Checklist input event listener
     this.checklistInput.addEventListener("keydown", (e) => {
-      if (e.key === "Enter" && this.checklistInput.value !== "") {
-        const titlePara = document.createElement("p");
-        titlePara.classList.add("checlist-entry-title");
-        titlePara.textContent = this.checklistInput.value;
-      }
+      if (e.key !== "Enter") return;
+
+      const text = this.checklistInput.value.trim();
+      if (!text) return;
+
+      const item = this.task.addChecklistItem(text);
+      this.checklistEntries.insertBefore(
+        this._createChecklistItem(item),
+        this.checklistInputRow,
+      );
+
+      this.checklistInput.value = "";
+      this.checklistInput.focus();
     });
 
     this.checklistField.appendChild(this.checklistEntries);
     this.checklistField.style.display = "none";
+    this.taskContent.appendChild(this.checklistField);
+
+    this.taskContainer.appendChild(this.taskContent);
+  }
+
+  _createChecklistItem(item) {
+    const checklistEntry = document.createElement("div");
+    checklistEntry.classList.add("checklist-entry");
+
+    const titlePara = document.createElement("p");
+    titlePara.classList.add("checklist-entry-title");
+    titlePara.textContent = item.title;
+    checklistEntry.appendChild(titlePara);
+    // add edit title event listener
+
+    const checkMarkBtn = document.createElement("button");
+    checkMarkBtn.innerHTML = checkOffSVG;
+    checkMarkBtn.classList.add("checklist-entry-btn");
+    checkMarkBtn.addEventListener("click", () => {
+      item.done = !item.done;
+      checkMarkBtn.innerHTML = item.done ? checkOnSVG : checkOffSVG;
+    });
+    checklistEntry.appendChild(checkMarkBtn);
+
+    const deleteItemBtn = document.createElement("button");
+    deleteItemBtn.classList.add("delete-item-btn");
+    deleteItemBtn.innerHTML = deleteSVG;
+    deleteItemBtn.addEventListener("click", () => {
+      this.task.removeChecklistItem(item.id);
+      checklistEntry.remove();
+    });
+    checklistEntry.appendChild(deleteItemBtn);
+
+    return checklistEntry;
+  }
+
+  _toggleExpand() {
+    const toggles = this.taskContent.querySelectorAll(".toggle");
+    toggles.forEach((toggle) => {
+      if (toggle.style.display === "none") {
+        toggle.style.display = "flex";
+        this.expandToggleBtn.innerHTML = collapseSVG;
+      } else {
+        toggle.style.display = "none";
+        this.expandToggleBtn.innerHTML = expandSVG;
+      }
+    });
+  }
+
+  getTaskUI() {
+    return this.taskContainer;
   }
 }

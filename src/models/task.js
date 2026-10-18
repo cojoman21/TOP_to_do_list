@@ -61,16 +61,22 @@ export class Task {
     if (!Array.isArray(value)) {
       throw new Error("Checklist must be an array.");
     }
-    this._checklist = value;
+    this._checklist = value.map((item) => ({
+      ...item,
+      id: item.id ?? crypto.randomUUID(),
+    }));
   }
 
-  addChecklistItem(item) {
-    if (typeof item !== "string" || item.trim() === "") {
-      throw new Error("Checklist item must be a non-empty string.");
+  addChecklistItem(title) {
+    if (typeof title !== "string" || title.trim() === "") {
+      throw new Error("Checklist title must be a non-empty string.");
     }
-    this.checklist.push({ title: item, done: false });
+    const item = { id: crypto.randomUUID(), title: title.trim(), done: false };
+    this.checklist.push(item);
+    return item;
   }
-  removeChecklistItem(index) {
-    this.checklist.splice(index, 1);
+  removeChecklistItem(id) {
+    const index = this._checklist.findIndex((item) => item.id === id);
+    if (index !== -1) this._checklist.splice(index, 1);
   }
 }
