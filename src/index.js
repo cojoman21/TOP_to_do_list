@@ -1,5 +1,6 @@
 import "./styles.css";
 import { TodoList } from "./models/todoList.js";
+import { TodoListUI } from "./models/todoListUI.js";
 
 const myTodoList = new TodoList();
 myTodoList.addTask({
@@ -8,7 +9,11 @@ myTodoList.addTask({
   priority: "Low",
   description: "This is my very first task",
   notes: "1st task ever",
-  checklist: ["Check this task", "Edit this task", "Delete this task"],
+  checklist: [
+    { title: "Check this task", done: false },
+    { title: "Edit this task", done: false },
+    { title: "Delete this task", done: false },
+  ],
 });
 
 myTodoList.addProject({
@@ -24,7 +29,11 @@ myTodoList.addTask({
   priority: "Medium",
   description: "This is my second task",
   notes: "Already on the 2nd task",
-  checklist: ["Check this task", "Edit this task", "Delete this task"],
+  checklist: [
+    { title: "Check this task", done: false },
+    { title: "Edit this task", done: false },
+    { title: "Delete this task", done: false },
+  ],
 });
 
 myTodoList.addTask({
@@ -34,15 +43,20 @@ myTodoList.addTask({
   priority: "Low",
   description: "This is my second task",
   notes: "Already on the 2nd task",
-  checklist: ["Check this task", "Edit this task", "Delete this task"],
+  checklist: [
+    { title: "Check this task", done: false },
+    { title: "Edit this task", done: false },
+    { title: "Delete this task", done: false },
+  ],
 });
 
 myTodoList.updateTask(myTodoList.tasks[2].id, { completed: false });
 
-myTodoList.deleteTask(myTodoList.tasks[2].id);
-
 myTodoList.updateProject(myTodoList.projects[1].id, {
   title: "Brand new project title",
 });
+
+const myTodoListUI = new TodoListUI(myTodoList);
+myTodoListUI.appendToPage(".main-content");
 
 console.log(myTodoList);

@@ -20,7 +20,7 @@ export class TaskUI {
     this.task = task;
 
     this.taskContainer = document.createElement("div");
-    this.taskContainer.dataset.id = task.id;
+    this.taskContainer.dataset.id = this.task.id;
     this.taskContainer.classList.add("task-container");
 
     this.taskContent = document.createElement("div");
@@ -43,7 +43,7 @@ export class TaskUI {
     this.expandToggleBtn = document.createElement("button");
     this.expandToggleBtn.classList.add("expand-toggle-btn");
     this.expandToggleBtn.innerHTML = expandSVG;
-    this.expandToggleBtn.addEventListener("click", _toggleExpand);
+    this.expandToggleBtn.addEventListener("click", this._toggleExpand);
     this.taskContainer.appendChild(this.expandToggleBtn);
 
     this.deleteBtn = document.createElement("button");
@@ -52,7 +52,7 @@ export class TaskUI {
     this.taskContainer.appendChild(this.deleteBtn);
 
     this.dateField = document.createElement("div");
-    this.dateField.classList.add("task-field");
+    this.dateField.classList.add("task-date-field");
     this.dateIcoSpan = document.createElement("span");
     this.dateIcoSpan.innerHTML = calendarSVG;
     this.datePara = document.createElement("p");
@@ -67,7 +67,7 @@ export class TaskUI {
     this.taskContent.appendChild(this.dateField);
 
     this.priorityField = document.createElement("div");
-    this.priorityField.classList.add("toggle", "task-field");
+    this.priorityField.classList.add("toggle", "task-priority-field");
     this.priorityIcoSpan = document.createElement("span");
     this.priorityIcoSpan.innerHTML = prioritySVG;
     this.priorityPara = document.createElement("p");
@@ -80,7 +80,7 @@ export class TaskUI {
     this.taskContent.appendChild(this.priorityField);
 
     this.descriptionField = document.createElement("div");
-    this.descriptionField.classList.add("toggle", "task-field");
+    this.descriptionField.classList.add("toggle", "task-description-field");
     this.descriptionIcoSpan = document.createElement("span");
     this.descriptionIcoSpan.innerHTML = descriptionSVG;
     this.descriptionPara = document.createElement("p");
@@ -98,7 +98,7 @@ export class TaskUI {
     this.taskContent.appendChild(this.descriptionField);
 
     this.notesField = document.createElement("div");
-    this.notesField.classList.add("toggle", "task-field");
+    this.notesField.classList.add("toggle", "task-notes-field");
     this.notesIcoSpan = document.createElement("span");
     this.notesIcoSpan.innerHTML = notesSVG;
     this.notesPara = document.createElement("p");
@@ -194,7 +194,7 @@ export class TaskUI {
     return checklistEntry;
   }
 
-  _toggleExpand() {
+  _toggleExpand = () => {
     const toggles = this.taskContent.querySelectorAll(".toggle");
     toggles.forEach((toggle) => {
       if (toggle.style.display === "none") {
@@ -205,9 +205,9 @@ export class TaskUI {
         this.expandToggleBtn.innerHTML = expandSVG;
       }
     });
-  }
+  };
 
-  getTaskUI() {
+  getTaskHTML() {
     return this.taskContainer;
   }
 }
