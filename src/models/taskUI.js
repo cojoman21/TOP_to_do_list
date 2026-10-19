@@ -11,6 +11,8 @@ import {
   notesSVG,
   statusSVG,
   checklistSVG,
+  circleEmptySVG,
+  circleFullSVG,
 } from "../icons/icons.js";
 
 import { format } from "date-fns";
@@ -52,7 +54,7 @@ export class TaskUI {
     this.taskContainer.appendChild(this.deleteBtn);
 
     this.dateField = document.createElement("div");
-    this.dateField.classList.add("task-date-field");
+    this.dateField.classList.add("task-date", "task-field");
     this.dateIcoSpan = document.createElement("span");
     this.dateIcoSpan.innerHTML = calendarSVG;
     this.datePara = document.createElement("p");
@@ -67,7 +69,7 @@ export class TaskUI {
     this.taskContent.appendChild(this.dateField);
 
     this.priorityField = document.createElement("div");
-    this.priorityField.classList.add("toggle", "task-priority-field");
+    this.priorityField.classList.add("toggle", "task-priority", "task-field");
     this.priorityIcoSpan = document.createElement("span");
     this.priorityIcoSpan.innerHTML = prioritySVG;
     this.priorityPara = document.createElement("p");
@@ -80,7 +82,11 @@ export class TaskUI {
     this.taskContent.appendChild(this.priorityField);
 
     this.descriptionField = document.createElement("div");
-    this.descriptionField.classList.add("toggle", "task-description-field");
+    this.descriptionField.classList.add(
+      "toggle",
+      "task-description",
+      "task-field",
+    );
     this.descriptionIcoSpan = document.createElement("span");
     this.descriptionIcoSpan.innerHTML = descriptionSVG;
     this.descriptionPara = document.createElement("p");
@@ -98,7 +104,7 @@ export class TaskUI {
     this.taskContent.appendChild(this.descriptionField);
 
     this.notesField = document.createElement("div");
-    this.notesField.classList.add("toggle", "task-notes-field");
+    this.notesField.classList.add("toggle", "task-notes", "task-field");
     this.notesIcoSpan = document.createElement("span");
     this.notesIcoSpan.innerHTML = notesSVG;
     this.notesPara = document.createElement("p");
@@ -117,13 +123,20 @@ export class TaskUI {
 
     // Checklist section
     this.checklistField = document.createElement("div");
-    this.checklistField.classList.add("toggle", "task-field");
+    this.checklistField.classList.add(
+      "toggle",
+      "task-checklist-container",
+      "task-field",
+    );
+    this.checklistTitleDiv = document.createElement("div");
+    this.checklistTitleDiv.classList.add("checklist-title-container");
     this.checklistIcoSpan = document.createElement("span");
     this.checklistIcoSpan.innerHTML = checklistSVG;
-    this.checklistField.appendChild(this.checklistIcoSpan);
+    this.checklistTitleDiv.appendChild(this.checklistIcoSpan);
     this.checklistFieldTitle = document.createElement("p");
-    this.checklistField.appendChild(this.checklistFieldTitle);
+    this.checklistTitleDiv.appendChild(this.checklistFieldTitle);
     this.checklistFieldTitle.textContent = "Checklist:";
+    this.checklistField.appendChild(this.checklistTitleDiv);
     this.checklistEntries = document.createElement("div");
     this.checklistEntries.classList.add("checklist-entries");
 
@@ -135,7 +148,7 @@ export class TaskUI {
     this.checklistInputRow.classList.add("checklist-input-entry");
     this.checklistInput = document.createElement("input");
     this.checklistInput.classList.add("checklist-entry-input");
-    this.checklistInput.placeholder = "Click to add item";
+    this.checklistInput.placeholder = "Add item";
     this.checklistInputRow.appendChild(this.checklistInput);
     this.checklistEntries.appendChild(this.checklistInputRow);
 
@@ -174,11 +187,11 @@ export class TaskUI {
     // add edit title event listener
 
     const checkMarkBtn = document.createElement("button");
-    checkMarkBtn.innerHTML = checkOffSVG;
+    checkMarkBtn.innerHTML = circleEmptySVG;
     checkMarkBtn.classList.add("checklist-entry-btn");
     checkMarkBtn.addEventListener("click", () => {
       item.done = !item.done;
-      checkMarkBtn.innerHTML = item.done ? checkOnSVG : checkOffSVG;
+      checkMarkBtn.innerHTML = item.done ? circleFullSVG : circleEmptySVG;
     });
     checklistEntry.appendChild(checkMarkBtn);
 
