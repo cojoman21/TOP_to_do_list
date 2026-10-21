@@ -93,6 +93,16 @@ body {
     .input-field {
       display: flex;
     }
+
+    .task-description .placeholder,
+    .task-notes .placeholder {
+      color: grey;
+    }
+
+    .task-description p,
+    .task-notes p {
+      color: black;
+    }
   }
 
   .buttons-container {

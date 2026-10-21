@@ -51,8 +51,21 @@ export class Task {
   };
 
   setPriority = (value) => {
-    if (value in ["Low", "Medium", "High"]) {
+    if (["Low", "Medium", "High"].includes(value)) {
       this.priority = value;
-    } else return;
+      console.log(`Priority set to ${value}`);
+    } else {
+      console.log("Invalid priority");
+      return;
+    }
+  };
+
+  toggleStatus = () => {
+    if (this.status === "In Progress") {
+      this.status = "Done";
+    } else {
+      this.status = "In Progress";
+    }
+    console.log(`Status is now ${this.status}`);
   };
 }

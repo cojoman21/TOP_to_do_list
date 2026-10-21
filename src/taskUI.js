@@ -15,7 +15,6 @@ import {
 export class TaskUI {
   constructor(task) {
     this.task = task;
-    this.priorities = ["Low", "Medium", "High"];
 
     this.taskContainer = document.createElement("div");
     this.taskContainer.dataset.id = task.id;
@@ -31,6 +30,11 @@ export class TaskUI {
     this.checkBtn.id = "check-btn";
     this.checkBtn.innerHTML = task.getTaskStatus() ? checkOn : checkOff;
     this.taskContainer.appendChild(this.checkBtn);
+    this.checkBtn.addEventListener("click", () => {
+      this.task.toggleStatus();
+      this.checkBtn.innerHTML = task.getTaskStatus() ? checkOn : checkOff;
+      this.taskStatus.textContent = task.status;
+    });
 
     this.taskTitle = document.createElement("h3");
     this.taskTitle.classList.add("task-title", "input-field");
@@ -48,7 +52,15 @@ export class TaskUI {
     this.priorityField.appendChild(this.taskPriority);
     this.taskContent.appendChild(this.priorityField);
     this.taskPriority.addEventListener("click", () => {
-      this.makeEditable;
+      this.makeEditable(
+        this.taskPriority,
+        this.createPriorityInput,
+        (newValue) => {
+          this.task.setPriority(newValue);
+        },
+      );
+      console.log(this.taskPriority.textContent);
+      console.log(task.priority);
     });
 
     this.statusField = document.createElement("div");
@@ -85,10 +97,29 @@ export class TaskUI {
     if (task.description !== "") {
       this.taskDescription.textContent = task.description;
     } else {
-      this.taskDescription.textContent = "Click to add description";
-      this.taskDescription.style.color = "grey";
+      this.taskDescription.textContent = "Click to add";
+      this.taskDescription.classList.toggle(
+        "placeholder",
+        task.description === "",
+      );
     }
     this.descriptionField.style.display = "none";
+    this.taskDescription.addEventListener("click", () => {
+      this.makeEditable(
+        this.taskDescription,
+        () =>
+          this.createInputField(this.task.description, "Enter a description"),
+        (newValue) => {
+          this.task.updateTask({ description: newValue });
+        },
+      );
+      if (
+        this.task.description !== "" &&
+        this.task.description !== "Click to add"
+      ) {
+        this.taskDescription.classList.remove("placeholder");
+      }
+    });
     this.descriptionField.appendChild(this.descriptionFieldIcon);
     this.descriptionField.appendChild(this.taskDescription);
     this.taskContent.appendChild(this.descriptionField);
@@ -101,10 +132,15 @@ export class TaskUI {
     if (task.notes !== "") {
       this.taskNotes.textContent = task.notes;
     } else {
-      this.taskNotes.textContent = "Click to add notes";
-      this.taskNotes.style.color = "grey";
+      this.taskNotes.textContent = "Click to add";
+      this.taskNotes.classList.toggle("placeholder", task.notes === "");
     }
     this.notesField.style.display = "none";
+    this.taskNotes.addEventListener("click", () => {
+      this.makeEditable(this.taskNotes, this.createInputField, (newValue) => {
+        this.task.updateTask({ notes: newValue });
+      });
+    });
     this.notesField.appendChild(this.notesFieldIcon);
     this.notesField.appendChild(this.taskNotes);
     this.taskContent.appendChild(this.notesField);
@@ -142,28 +178,47 @@ export class TaskUI {
     });
   };
 
-  makeEditable = (displayElement, inputElement) => {};
+  makeEditable = (displayElement, buildInput, onCommit) => {
+    const input = buildInput();
+    displayElement.replaceWith(input);
+    input.focus();
 
-  priorityInput = () => {
+    const commit = () => {
+      const newValue = input.value;
+      onCommit(newValue);
+      displayElement.textContent = newValue;
+      input.replaceWith(displayElement);
+    };
+
+    if (input.tagName === "SELECT") {
+      input.addEventListener("change", commit);
+    } else {
+      input.addEventListener("keydown", (e) => {
+        if (e.key === "Enter") commit();
+      });
+    }
+  };
+
+  createPriorityInput = (currentValue) => {
+    const priorities = ["Low", "Medium", "High"];
     const select = document.createElement("select");
 
-    this.priorities.forEach((priority) => {
+    priorities.forEach((priority) => {
       const option = document.createElement("option");
       option.value = priority;
       option.textContent = priority;
+      if (priority === currentValue) option.selected = true;
       select.appendChild(option);
     });
 
-    select.addEventListener("change", () => {
-      console.log(this.task.priority);
-      this.task.setPriority(select.value);
-      console.log(this.task.priority);
+    return select;
+  };
 
-      const newStatus = document.createElement("p");
-      newStatus.textContent = this.task.priority;
-      select.replaceWith(newStatus);
-    });
-
-    this.replaceWith(select);
+  createInputField = (currentValue, placeholderValue) => {
+    const input = document.createElement("input");
+    input.value = currentValue === "Click to add" ? currentValue : "";
+    input.placeholder = placeholderValue;
+    input.focus();
+    return input;
   };
 }
