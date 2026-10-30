@@ -33,13 +33,17 @@ export class TaskUI {
     this.checkToggleBtn.innerHTML = this.task.completed
       ? checkOnSVG
       : checkOffSVG;
-    // add checkToggleBtn event listener
+    this.checkToggleBtn.addEventListener("click", (e) => {
+      this.task.completed = !this.task.completed;
+      this.checkToggleBtn.innerHTML = this.task.completed
+        ? checkOnSVG
+        : checkOffSVG;
+    });
     this.taskContainer.appendChild(this.checkToggleBtn);
 
     this.titlePara = document.createElement("p");
     this.titlePara.classList.add("task-title");
     this.titlePara.textContent = this.task.title;
-    // add edit title event listener
     this.taskContainer.appendChild(this.titlePara);
 
     this.expandToggleBtn = document.createElement("button");
@@ -78,7 +82,6 @@ export class TaskUI {
     this.priorityField.appendChild(this.priorityIcoSpan);
     this.priorityField.appendChild(this.priorityPara);
     this.priorityField.style.display = "none";
-    // add priority edit event listener
     this.taskContent.appendChild(this.priorityField);
 
     this.descriptionField = document.createElement("div");
@@ -100,7 +103,6 @@ export class TaskUI {
     this.descriptionField.appendChild(this.descriptionIcoSpan);
     this.descriptionField.appendChild(this.descriptionPara);
     this.descriptionField.style.display = "none";
-    // add description edit event listener
     this.taskContent.appendChild(this.descriptionField);
 
     this.notesField = document.createElement("div");
@@ -118,7 +120,6 @@ export class TaskUI {
     this.notesField.appendChild(this.notesIcoSpan);
     this.notesField.appendChild(this.notesPara);
     this.notesField.style.display = "none";
-    // add notes edit even listener
     this.taskContent.appendChild(this.notesField);
 
     // Checklist section
@@ -184,7 +185,6 @@ export class TaskUI {
     titlePara.classList.add("checklist-entry-title");
     titlePara.textContent = item.title;
     checklistEntry.appendChild(titlePara);
-    // add edit title event listener
 
     const checkMarkBtn = document.createElement("button");
     checkMarkBtn.innerHTML = circleEmptySVG;
@@ -219,6 +219,8 @@ export class TaskUI {
       }
     });
   };
+
+  _editTaskForm = () => {};
 
   getTaskHTML() {
     return this.taskContainer;
