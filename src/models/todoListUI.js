@@ -14,7 +14,23 @@ export class TodoListUI {
 
       const taskEl = deleteBtn.closest(".task-container");
       this.todoList.deleteTask(taskEl.dataset.id);
-      taskEl.remove();
+      if (confirm("Are you sure that you want to delete this Todo?")) {
+        taskEl.remove();
+      } else {
+        return;
+      }
+    });
+
+    this.todoListContainer.addEventListener("click", (e) => {
+      e.preventDefault();
+      const editBtn = e.target.closest(".edit-btn");
+      if (!editBtn) return;
+
+      const editDialog = document.getElementById("edit-task-dialog");
+      editDialog.showModal();
+
+      const taskEl = editBtn.closest(".task-container");
+      this.todoList.deleteTask(taskEl.dataset.id);
     });
 
     this.render();

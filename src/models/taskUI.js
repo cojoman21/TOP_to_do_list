@@ -52,6 +52,11 @@ export class TaskUI {
     this.expandToggleBtn.addEventListener("click", this._toggleExpand);
     this.taskContainer.appendChild(this.expandToggleBtn);
 
+    this.editBtn = document.createElement("button");
+    this.editBtn.classList.add("edit-btn");
+    this.editBtn.innerHTML = editSVG;
+    this.taskContainer.appendChild(this.editBtn);
+
     this.deleteBtn = document.createElement("button");
     this.deleteBtn.classList.add("delete-btn");
     this.deleteBtn.innerHTML = deleteSVG;
