@@ -22,13 +22,22 @@ export class TodoList {
     this.tasks.push(task);
   }
 
-  deleteTask(task_id) {
-    // find() returns false or the found object
-    const task = this.tasks.find((task) => task.id === task_id);
+  getTask(taskID) {
+    const task = this.tasks.find((task) => task.id === taskID);
     if (!task) {
-      throw new Error(`Task with id "${task_id}" not found.`);
+      throw new Error(`Task with id "${taskID}" not found.`);
     } else {
-      this.tasks = this.tasks.filter((task) => task.id !== task_id);
+      return task;
+    }
+  }
+
+  deleteTask(taskID) {
+    // find() returns false or the found object
+    const task = this.tasks.find((task) => task.id === taskID);
+    if (!task) {
+      throw new Error(`Task with id "${taskID}" not found.`);
+    } else {
+      this.tasks = this.tasks.filter((task) => task.id !== taskID);
     }
   }
 

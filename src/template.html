@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
@@ -9,7 +9,12 @@
   <body>
     <div class="main-content"></div>
     <dialog id="edit-task-dialog">
-      <form action="./" method="post" class="edit-task-form" id="editTaskForm">
+      <form
+        action="./"
+        method="dialog"
+        class="edit-task-form"
+        id="editTaskForm"
+      >
         <h1>Edit Task</h1>
         <div class="form-row">
           <div class="form-group">
@@ -23,7 +28,6 @@
           <div class="form-group">
             <label for="task-priority">Priority</label>
             <select name="task-priority" id="task-priority">
-              <option value="" id="original-priority"></option>
               <option value="Low">Low</option>
               <option value="Medium">Medium</option>
               <option value="High">High</option>
@@ -37,6 +41,10 @@
           <div class="form-group">
             <label for="task-notes">Notes</label>
             <input type="text" id="task-notes" name="task-notes" />
+          </div>
+          <div class="form-controls">
+            <button type="submit" id="update-task-btn">Update</button>
+            <button type="button" id="cancel-update-btn">Cancel</button>
           </div>
         </div>
       </form>
