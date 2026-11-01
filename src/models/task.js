@@ -1,11 +1,11 @@
-import { addDays } from "date-fns";
+import { addDays, isValid, parseISO } from "date-fns";
 
 const VALID_PRIORITIES = ["Low", "Medium", "High", "Urgent"];
 
 export class Task {
   constructor({
-    title,
     projectId,
+    title,
     priority = "Medium",
     completed = false,
     dueDate = addDays(new Date(), 10),
@@ -52,6 +52,24 @@ export class Task {
       );
     }
     this._priority = value;
+  }
+
+  get dueDate() {
+    return this._dueDate;
+  }
+
+  set dueDate(value) {
+    let date;
+    if (typeof value === "string") {
+      date = parseISO(value);
+    } else if (value instanceof Date) {
+      date = value;
+    }
+    if (!isValid(date)) {
+      throw new Error(`Invalid due date: "${value}".`);
+    }
+
+    this._dueDate = date;
   }
 
   get checklist() {
