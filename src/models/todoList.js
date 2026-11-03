@@ -12,7 +12,42 @@ export class TodoList {
       description: "This is the default project",
     });
     this.projects.push(defaultProject);
-    this.activeProject = defaultProject;
+    this.activeProjectId = defaultProject.id;
+  }
+
+  save() {
+    localStorage.setItem("todoList", JSON.stringify(this));
+  }
+
+  toJSON() {
+    return {
+      id: this.id,
+      projects: this.projects,
+      tasks: this.tasks,
+      activeProjectId: this.activeProjectId,
+    };
+  }
+
+  static fromJSON(data) {
+    const todoList = new TodoList();
+    todoList.id = data.id;
+    todoList.projects = data.projects.map((p) => Project.fromJSON(p));
+    todoList.tasks = data.tasks.map((t) => Task.fromJSON(t));
+    todoList.activeProjectId = data.activeProjectId;
+    return todoList;
+  }
+
+  get activeProject() {
+    return this.projects.find((p) => p.id === this.activeProjectId);
+  }
+
+  setActiveProject(project_id) {
+    const project = this.projects.find((project) => project.id === project_id);
+    if (!project) {
+      throw new Error(`Project with the id "${project_id}" not found.`);
+    } else {
+      this.activeProjectId = project.id;
+    }
   }
 
   addTask(taskData) {
@@ -20,6 +55,7 @@ export class TodoList {
     // each project UI will have a "Add task" button
     const task = new Task(taskData);
     this.tasks.push(task);
+    this.save();
   }
 
   getTask(taskID) {
@@ -38,6 +74,7 @@ export class TodoList {
       throw new Error(`Task with id "${taskID}" not found.`);
     } else {
       this.tasks = this.tasks.filter((task) => task.id !== taskID);
+      this.save();
     }
   }
 
@@ -52,13 +89,16 @@ export class TodoList {
           task[key] = value;
         }
       }
+      this.save();
     }
   }
 
   addProject(projectData) {
     const project = new Project(projectData);
     this.projects.push(project);
+    this.save();
   }
+
   deleteProject(project_id) {
     const project = this.projects.find((project) => project.id === project_id);
     if (!project) {
@@ -67,6 +107,10 @@ export class TodoList {
       this.projects = this.projects.filter(
         (project) => project.id !== project_id,
       );
+      if (this.activeProjectId === project_id) {
+        this.activeProjectId = this.projects[0]?.id ?? null;
+      }
+      this.save();
     }
   }
   updateProject(project_id, updatedData) {
@@ -79,15 +123,7 @@ export class TodoList {
           project[key] = value;
         }
       }
-    }
-  }
-
-  setActiveProject(project_id) {
-    const project = this.projects.find((project) => project.id === project_id);
-    if (!project) {
-      throw new Error(`Project with the id "${project_id}" not found.`);
-    } else {
-      this.activeProject = project;
+      this.save();
     }
   }
 }

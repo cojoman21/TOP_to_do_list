@@ -1,3 +1,5 @@
+import { addTaskSVG } from "../icons/icons.js";
+
 export class ProjectUI {
   constructor(project) {
     this.project = project;
@@ -20,6 +22,11 @@ export class ProjectUI {
     this.projectContent.classList.add("project-content");
 
     this.projectContainer.appendChild(this.projectContent);
+
+    this.addTaskBtn = document.createElement("button");
+    this.addTaskBtn.classList.add("add-task-btn");
+    this.addTaskBtn.innerHTML = addTaskSVG;
+    this.projectContainer.appendChild(this.addTaskBtn);
   }
 
   getProjectHTML() {

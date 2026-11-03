@@ -66,8 +66,8 @@ dialog {
 }
 
 svg {
-  height: 1.1em;
-  width: 1.1em;
+  height: 1.2em;
+  width: 1.2em;
 }
 
 button {
@@ -174,4 +174,9 @@ button {
     grid-column: 3 / 4;
     grid-row: 1 / 2;
   }
+}
+
+.add-task-btn {
+  align-self: start;
+  margin-left: 15px;
 }

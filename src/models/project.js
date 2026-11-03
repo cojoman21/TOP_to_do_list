@@ -21,4 +21,18 @@ export class Project {
     }
     this._title = value;
   }
+
+  toJSON() {
+    return {
+      id: this.id,
+      title: this.title,
+      description: this.description,
+    };
+  }
+
+  static fromJSON(data) {
+    const project = new Project(data);
+    project.id = data.id;
+    return project;
+  }
 }

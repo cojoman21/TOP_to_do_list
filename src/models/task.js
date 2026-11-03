@@ -97,4 +97,24 @@ export class Task {
     const index = this._checklist.findIndex((item) => item.id === id);
     if (index !== -1) this._checklist.splice(index, 1);
   }
+
+  toJSON() {
+    return {
+      id: this.id,
+      projectId: this.projectId,
+      title: this.title,
+      priority: this.priority,
+      completed: this.completed,
+      dueDate: this.dueDate,
+      description: this.description,
+      notes: this.notes,
+      checklist: this.checklist,
+    };
+  }
+
+  static fromJSON(data) {
+    const task = new Task(data);
+    task.id = data.id;
+    return task;
+  }
 }
