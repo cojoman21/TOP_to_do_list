@@ -54,14 +54,6 @@ dialog {
     button:active {
       background-color: rgb(87, 87, 87);
     }
-
-    #update-task-btn {
-      color: rgb(0, 199, 116);
-    }
-
-    #cancel-update-btn {
-      color: rgb(255, 0, 0);
-    }
   }
 }
 
@@ -179,4 +171,14 @@ button {
 .add-task-btn {
   align-self: start;
   margin-left: 15px;
+}
+
+#update-task-btn,
+#submit-new-task-btn {
+  color: rgb(0, 199, 116);
+}
+
+#cancel-update-btn,
+#cancel-add-task-btn {
+  color: rgb(255, 0, 0);
 }

@@ -12,6 +12,10 @@ export class TodoListUI {
     this.editTaskForm = document.getElementById("editTaskForm");
     this.editErrorPara = this.editTaskForm.querySelector(".edit-task-error");
 
+    this.addTaskDialog = document.getElementById("add-task-dialog");
+    this.addTaskForm = document.getElementById("addTaskForm");
+    this.addErrorPara = this.addTaskForm.querySelector(".add-task-error");
+
     this.todoListContainer.addEventListener("click", (e) => {
       const deleteBtn = e.target.closest(".delete-btn");
       if (!deleteBtn) return;
@@ -89,6 +93,53 @@ export class TodoListUI {
 
     this.editTaskDialog.addEventListener("close", (e) => {
       this.editTaskDialog.close();
+    });
+
+    this.todoListContainer.addEventListener("click", (e) => {
+      const addTaskBtn = e.target.closest(".add-task-btn");
+      if (!addTaskBtn) return;
+
+      const projectEl = addTaskBtn.closest(".project-container");
+      this.addTaskForm.dataset.id = projectEl.dataset.id;
+
+      this.addTaskForm.reset();
+      this.addErrorPara.textContent = "";
+
+      this.addTaskDialog.showModal();
+    });
+
+    this.addTaskForm.addEventListener("submit", (e) => {
+      e.preventDefault();
+
+      const data = new FormData(this.addTaskForm);
+
+      const taskData = {
+        projectId: this.addTaskForm.dataset.id,
+        title: data.get("add-task-title"),
+        dueDate: data.get("add-task-due-date") || undefined,
+        priority: data.get("add-task-priority") || undefined,
+        description: data.get("add-task-description"),
+        notes: data.get("add-task-notes"),
+      };
+
+      try {
+        this.todoList.addTask(taskData);
+        this.addTaskDialog.close();
+        this.render();
+      } catch (error) {
+        this.addErrorPara.textContent = error.message;
+      }
+    });
+
+    document
+      .getElementById("cancel-add-task-btn")
+      .addEventListener("click", (e) => {
+        this.addTaskForm.reset();
+        this.addTaskDialog.close();
+      });
+
+    this.addTaskDialog.addEventListener("close", (e) => {
+      this.addTaskDialog.close();
     });
 
     this.render();
