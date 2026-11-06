@@ -1,6 +1,8 @@
 import { Task } from "./task.js";
 import { Project } from "./project.js";
 
+export const STORAGE_KEY = "odin-todo-app:todoList";
+
 export class TodoList {
   constructor() {
     this.id = crypto.randomUUID();
@@ -16,7 +18,7 @@ export class TodoList {
   }
 
   save() {
-    localStorage.setItem("todoList", JSON.stringify(this));
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(this));
   }
 
   toJSON() {

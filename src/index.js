@@ -1,9 +1,9 @@
 import "./styles.css";
-import { TodoList } from "./models/todoList.js";
+import { STORAGE_KEY, TodoList } from "./models/todoList.js";
 import { TodoListUI } from "./models/todoListUI.js";
 
 function loadTodoList() {
-  const raw = localStorage.getItem("todoList");
+  const raw = localStorage.getItem(STORAGE_KEY);
   if (!raw) return null;
   return TodoList.fromJSON(JSON.parse(raw));
 }
